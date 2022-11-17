@@ -5,11 +5,13 @@ import { Component, OnInit } from '@angular/core';
   selector: 'app-p-sales-list',
   template: `
     <div class="card shadow mb-5">
-    <h3 class="card-header text-center">Ventas</h3>
+    <h3 class="card-header fst-italic text-secondary">
+      <i class="fa fa-tag me-2 ms-3"></i>
+      Ventas</h3>
     <div class="card-body p-0">
       <table class="table table-striped table-hover mb-0 desktop">
         <thead>
-          <tr class="text-center">
+          <tr class="text-center text-secondary fst-italic fw-semibold">
             <th scope="col">Fecha</th>
             <th scope="col">Comprador</th>
             <th scope="col">Producto</th>
@@ -22,19 +24,18 @@ import { Component, OnInit } from '@angular/core';
           <ng-container *ngIf="sales">
           <tr
             *ngFor="let sale of sales"
-            class="text-center"
             routerLink="/account/pharmacy/sale/{{ sale.id }}"
             style="cursor: pointer"
           >
-            <td> {{ sale.saleDate | date: 'medium' }}</td>
+            <td class="ps-4"> {{ sale.saleDate | date }}</td>
             <td>
               {{ sale.buyer.firstName }} {{ sale.buyer.lastName }}
             </td>
             <td>{{ sale.product.name }}</td>
-            <td>
+            <td class="text-center">
               {{ sale.quantity }}
             </td>
-            <td>{{(sale.quantity * sale.product.price) | currency}} MXN</td>
+            <td class="text-center">{{(sale.quantity * sale.product.price) | currency}} MXN</td>
           </tr>
           </ng-container>
 

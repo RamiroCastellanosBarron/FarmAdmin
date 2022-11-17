@@ -18,7 +18,7 @@ import { AccountService } from '../_services/account.service';
 
 <footer class="footer mt-auto py-3 bg-light">
   <div class="row w-100">
-      <span class="text-muted text-center">FarmAdmin, S.A. de C.V.</span>
+      <span class="text-muted fw-light text-center">FarmAdmin, S.A. de C.V.</span>
   </div>
 </footer>
 

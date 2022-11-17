@@ -26,8 +26,6 @@ import { subscribeOn } from 'rxjs';
           <tr
             *ngFor="let purchase of purchases"
             class="text-center"
-            routerLink="/account/customer/purchase/{{ purchase.id }}"
-            style="cursor: pointer"
           >
             <td> {{ purchase.saleDate | date }}</td>
             <td>{{ purchase.product.name }}</td>

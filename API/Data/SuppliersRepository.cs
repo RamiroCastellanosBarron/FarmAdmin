@@ -79,6 +79,9 @@ namespace API.Data
         public async Task<Sale> GetSale(int id)
         {
             var sale = await _context.Sales
+                .Include(x => x.Seller)
+                .Include(x => x.Buyer)
+                .Include(x => x.Product)
                 .SingleOrDefaultAsync(x => x.Id == id);
 
             return sale;

@@ -102,6 +102,7 @@ namespace API.Data
                 .Include(x => x.Seller)
                 .Include(x => x.Buyer)
                 .Where(x => x.BuyerId == id)
+                .OrderByDescending(x => x.SaleDate)
                 .ToListAsync();
 
             foreach (var purchase in purchases)
@@ -121,6 +122,37 @@ namespace API.Data
                 .SingleOrDefaultAsync(x => x.Id == id);
 
             return sale;
+        }
+
+        public async Task<bool> BuyProduct(Product product, int CustomerId)
+        {
+            if (product == null) return false;
+
+            var sale = new Sale()
+            {
+                Quantity= product.Quantity,
+                ProductId = product.Id,
+                SellerId = product.UserId,
+                BuyerId = CustomerId
+            };
+
+            var prod = await _context.Products
+                .SingleOrDefaultAsync(x => x.Id == product.Id);
+
+            prod.Quantity-=product.Quantity;
+
+            await _context.Sales.AddAsync(sale);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<AppUser> GetUser(int id)
+        {
+            var user = await _context.Users
+                .SingleOrDefaultAsync(x => x.Id == id);
+
+            return user;
         }
     }
 }

@@ -1,10 +1,10 @@
-import { CustomersService } from './../customers.service';
+import { PharmaciesService } from './../pharmacies.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-c-products-list',
+  selector: 'app-p-items-list',
   template: `
-  <div class="card shadow mb-5">
+    <div class="card shadow mb-5">
     <h3 class="card-header text-secondary fst-italic">
       <i class="fa fa-thermometer me-2 ms-3"></i>
       Productos</h3>
@@ -22,7 +22,7 @@ import { Component, OnInit } from '@angular/core';
         <tbody>
           <tr
             *ngFor="let product of products"
-            routerLink="/account/customer/product/{{ product.id }}"
+            routerLink="/account/pharmacy/item/product/{{ product.id }}"
             style="cursor: pointer"
           >
           <td class="ps-4">{{product.user.firstName}}</td>
@@ -42,21 +42,21 @@ import { Component, OnInit } from '@angular/core';
   styles: [
   ]
 })
-export class CProductsListComponent implements OnInit {
+export class PItemsListComponent implements OnInit {
   products: any;
 
-  constructor(private customersService: CustomersService) { }
+  constructor(private pharmaciesService: PharmaciesService) { }
 
   ngOnInit(): void {
-    this.getProducts();
+    this.getItems();
   }
 
-  getProducts() {
-    this.customersService.getProducts().subscribe(response => {
-      console.log('products response', response);
+  getItems() {
+    this.pharmaciesService.getItems().subscribe(response => {
+      console.log('items response', response);
       this.products = response;
     }, error => {
-      console.log('products error', error);
+      console.log('items error', error);
     })
   }
 

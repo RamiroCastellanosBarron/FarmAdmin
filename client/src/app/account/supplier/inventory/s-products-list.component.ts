@@ -6,11 +6,13 @@ import { Item } from '../../_models/item';
   selector: 'app-s-products-list',
   template: `
   <div class="card shadow mb-5">
-    <h3 class="card-header text-center">Productos</h3>
+    <h3 class="card-header text-muted fst-italic">
+      <i class="fa fa-archive ms-3 me-2"></i>
+      Productos</h3>
     <div class="card-body p-0">
       <table class="table table-striped table-hover mb-0 desktop">
         <thead>
-          <tr class="text-center">
+          <tr class="text-center text-secondary fst-italic fw-semibold">
             <th scope="col">Nombre</th>
             <th scope="col">Descripción</th>
             <th scope="col">Precio</th>
@@ -21,18 +23,17 @@ import { Item } from '../../_models/item';
         <tbody>
           <tr
             *ngFor="let item of items"
-            class="text-center"
             routerLink="/account/supplier/inventory/product/{{ item.id }}"
             style="cursor: pointer"
           >
-            <td class="text-center">
+            <td class="ps-4">
               {{ item.name }}
             </td>
             <td>{{ item.description }}</td>
-            <td>
+            <td class="text-center">
               {{ item.price | currency }}
             </td>
-            <td>{{item.quantity | number}}</td>
+            <td class="text-center">{{item.quantity | number}}</td>
           </tr>
         </tbody>
       </table>

@@ -64,5 +64,23 @@ namespace API.Controllers
 
             return Ok(purchase);
         }
+
+        [HttpGet("user")]
+        public async Task<ActionResult<AppUser>> GetUser()
+        {
+            var user = await _unitOfWork.CustomersRepository.GetUser(User.GetUserId());
+
+            return Ok(user);
+        }
+
+        [HttpPost("buy")]
+        public async Task<ActionResult<string>> BuyProduct(Product product)
+        {
+            var response = await _unitOfWork.CustomersRepository.BuyProduct(product, User.GetUserId());
+
+            if (response == false) return BadRequest();
+
+            return Ok();
+        }
     }
 }

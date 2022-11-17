@@ -57,12 +57,28 @@ namespace API.Controllers
             return Ok(sales);
         }
 
+        [HttpGet("sales/{id}")]
+        public async Task<ActionResult<Sale>> GetSale(int id)
+        {
+            var sale = await _unitOfWork.PharmaciesRepository.GetSale(id);
+
+            return Ok(sale);
+        }
+
         [HttpGet("purchases")]
         public async Task<ActionResult<IEnumerable<Sale>>> GetPurchases()
         {
             var purchases = await _unitOfWork.PharmaciesRepository.GetPurchases(User.GetUserId());
 
             return Ok(purchases);
+        }
+
+        [HttpGet("purchases/{id}")]
+        public async Task<ActionResult<Sale>> GetPurchase(int id)
+        {
+            var purchase = await _unitOfWork.PharmaciesRepository.GetPurchase(id);
+
+            return Ok(purchase);
         }
 
         [HttpGet("products")]
@@ -79,6 +95,40 @@ namespace API.Controllers
             var product = await _unitOfWork.PharmaciesRepository.GetProduct(id);
 
             return Ok(product);
+        }
+
+        [HttpGet("items")]
+        public async Task<ActionResult<IEnumerable<Product>>> GetItems()
+        {
+            var products = await _unitOfWork.PharmaciesRepository.GetItems();
+
+            return Ok(products);
+        }
+
+        [HttpGet("items/{id}")]
+        public async Task<ActionResult<Product>> GetItem(int id)
+        {
+            var product = await _unitOfWork.PharmaciesRepository.GetItem(id);
+
+            return Ok(product);
+        }
+
+        [HttpGet("user")]
+        public async Task<ActionResult<AppUser>> GetUser()
+        {
+            var user = await _unitOfWork.PharmaciesRepository.GetUser(User.GetUserId());
+
+            return Ok(user);
+        }
+
+        [HttpPost("buy")]
+        public async Task<ActionResult<string>> BuyProduct(Product product)
+        {
+            var response = await _unitOfWork.PharmaciesRepository.BuyProduct(product, User.GetUserId());
+
+            if (response == false) return BadRequest();
+
+            return Ok();
         }
     }
 }

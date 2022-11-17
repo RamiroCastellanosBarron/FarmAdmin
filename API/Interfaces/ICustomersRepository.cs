@@ -10,6 +10,9 @@ namespace API.Interfaces
 
         Task<AppUser> GetPharmacy(int id);
         Task<Product> GetProduct(int id);
-        Task<Sale> GetPurchase(int id); 
+        Task<Sale> GetPurchase(int id);
+
+        Task<bool> BuyProduct(Product product, int CustomerId);
+        Task<AppUser> GetUser(int id);
     }
 }

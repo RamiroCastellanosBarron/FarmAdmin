@@ -31,13 +31,16 @@ import { SOrdersListComponent } from './supplier/orders/s-orders-list.component'
 import { SOrderDetailComponent } from './supplier/orders/s-order-detail.component';
 import { SSalesListComponent } from './supplier/sales/s-sales-list.component';
 import { SSaleDetailComponent } from './supplier/sales/s-sale-detail.component';
-import { ShoppingCartComponent } from './customer/shopping-cart.component';
+import { ShoppingCartComponent } from './customer/c-shopping-cart.component';
 import { CProductsListComponent } from './customer/products/c-products-list.component';
 import { CProductDetailComponent } from './customer/products/c-product-detail.component';
 import { CPurchasesListComponent } from './customer/purchases/c-purchases-list.component';
 import { CPurchaseDetailComponent } from './customer/purchases/c-purchase-detail.component';
 import { CPharmaciesListComponent } from './customer/pharmacies/c-pharmacies-list.component';
 import { CPharmacyDetailComponent } from './customer/pharmacies/c-pharmacy-detail.component';
+import { PItemDetailComponent } from './pharmacy/items/p-item-detail.component';
+import { PItemsListComponent } from './pharmacy/items/p-items-list.component';
+import { PShoppingCartComponent } from './pharmacy/p-shopping-cart.component';
 
 @NgModule({
   declarations: [
@@ -69,6 +72,9 @@ import { CPharmacyDetailComponent } from './customer/pharmacies/c-pharmacy-detai
     CPurchaseDetailComponent,
     CPharmaciesListComponent,
     CPharmacyDetailComponent,
+    PItemDetailComponent,
+    PItemsListComponent,
+    PShoppingCartComponent,
   ],
   imports: [
     CommonModule,

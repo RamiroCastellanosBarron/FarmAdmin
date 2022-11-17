@@ -1,13 +1,12 @@
-import { CPharmacyDetailComponent } from './../pharmacies/c-pharmacy-detail.component';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CustomersService } from './../customers.service';
+import { PharmaciesService } from './../pharmacies.service';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from '../../_models/product';
 
 @Component({
-  selector: 'app-c-product-detail',
+  selector: 'app-p-item-detail',
   template: `
-  <div *ngIf="product">
+    <div *ngIf="product">
     <h4 class="fst-italic">{{ product.name }}</h4>
     <p class="text-primary fst-semibold fs-3">{{ product.description }}</p>
     <div class="mb-3">
@@ -40,28 +39,28 @@ import { Product } from '../../_models/product';
   styles: [
   ]
 })
-export class CProductDetailComponent implements OnInit {
+export class PItemDetailComponent implements OnInit {
   product: any;
   producto: Product;
 
-  constructor(private customersService: CustomersService, private route: ActivatedRoute, private router: Router) { }
+  constructor(private pharmaciesService: PharmaciesService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
-    this.customersService.currentMessage.subscribe(product => this.producto = product);
+    this.pharmaciesService.currentProduct.subscribe(product => this.producto = product);
     this.getProduct();
+  }
+
+  back() {
+    this.router.navigateByUrl('account/pharmacy/items');
   }
 
   add(product: Product) {
     console.log('add product', product);
-    this.customersService.changeMessage(product);
-  }
-
-  back() {
-    this.router.navigateByUrl('account/customer/products');
+    this.pharmaciesService.changeProduct(product);
   }
 
   getProduct() {
-    this.customersService.getProduct(this.route.snapshot.paramMap.get('id')).subscribe(response => {
+    this.pharmaciesService.getProduct(this.route.snapshot.paramMap.get('id')).subscribe(response => {
       console.log('product response', response);
       this.product = response;
     }, error => {

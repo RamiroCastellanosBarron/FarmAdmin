@@ -5,11 +5,13 @@ import { Component, OnInit } from '@angular/core';
   selector: 'app-p-suppliers-list',
   template: `
     <div class="card shadow mb-5">
-    <h3 class="card-header text-center">Proveedores</h3>
+    <h3 class="card-header text-secondary fst-italic">
+      <i class="fa fa-address-book-o me-2 ms-3"></i>
+      Proveedores</h3>
     <div class="card-body p-0">
       <table class="table table-striped table-hover mb-0 desktop">
         <thead>
-          <tr class="text-center">
+          <tr class="text-center text-secondary fst-italic fw-semibold">
             <th scope="col">Nombre</th>
             <th scope="col">Dirección</th>
             <th scope="col">Teléfono</th>
@@ -19,15 +21,14 @@ import { Component, OnInit } from '@angular/core';
         <tbody>
           <tr
             *ngFor="let supplier of suppliers"
-            class="text-center"
             routerLink="/account/pharmacy/supplier/{{ supplier.id }}"
             style="cursor: pointer"
           >
-            <td class="text-center">
+            <td class="ps-4">
               {{ supplier.firstName | titlecase }}{{ supplier.lastName }}
             </td>
             <td>{{ supplier.address.street }} {{ supplier.address.number }}, {{supplier.address.city }}</td>
-            <td>{{ supplier.phoneNumber }}</td>
+            <td class="text-center">{{ supplier.phoneNumber }}</td>
           </tr>
         </tbody>
       </table>

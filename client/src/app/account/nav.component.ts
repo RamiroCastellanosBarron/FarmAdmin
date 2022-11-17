@@ -8,10 +8,9 @@ import { AccountService } from '../_services/account.service';
     <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top shadow">
   <div class="container">
     <a
-      class="navbar-brand"
+      class="text-secondary me-3 fs-4 text-decoration-none fst-italic fw-semibold"
       routerLink="/account"
-      *ngIf="accountService.currentUser$ | async as user"
-      >{{ user.username | titlecase }}</a
+      >FarmAdmin</a
     >
     <button
       class="navbar-toggler"
@@ -56,6 +55,15 @@ import { AccountService } from '../_services/account.service';
           <li class="nav-item" *appHasRole="['Pharmacy']">
             <a
               class="nav-link"
+              routerLink="/account/pharmacy/items"
+              routerLinkActive="active"
+              >Productos
+              <i class="fa fa-thermometer"></i>
+            </a>
+          </li>
+          <li class="nav-item" *appHasRole="['Pharmacy']">
+            <a
+              class="nav-link"
               routerLink="/account/pharmacy/sales"
               routerLinkActive="active"
               >Ventas
@@ -69,6 +77,15 @@ import { AccountService } from '../_services/account.service';
               routerLinkActive="active"
               >Compras
               <i class="fa fa-shopping-bag"></i>
+            </a>
+          </li>
+          <li class="nav-item" *appHasRole="['Pharmacy']">
+            <a
+              class="nav-link"
+              routerLink="/account/pharmacy/shopping-cart"
+              routerLinkActive="active"
+              >Carrito de Compras
+              <i class="fa fa-shopping-cart"></i>
             </a>
           </li>
           <!-- Supplier -->

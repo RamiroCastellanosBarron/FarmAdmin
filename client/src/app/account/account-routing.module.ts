@@ -1,4 +1,8 @@
-import { ShoppingCartComponent } from './customer/shopping-cart.component';
+import { PShoppingCartComponent } from './pharmacy/p-shopping-cart.component';
+import { PItemDetailComponent } from './pharmacy/items/p-item-detail.component';
+import { PItemsListComponent } from './pharmacy/items/p-items-list.component';
+import { SSaleDetailComponent } from './supplier/sales/s-sale-detail.component';
+import { ShoppingCartComponent } from './customer/c-shopping-cart.component';
 import { CPharmacyDetailComponent } from './customer/pharmacies/c-pharmacy-detail.component';
 import { CPharmaciesListComponent } from './customer/pharmacies/c-pharmacies-list.component';
 import { CProductDetailComponent } from './customer/products/c-product-detail.component';
@@ -34,7 +38,7 @@ const routes: Routes = [
   { path: 'supplier/customer/:id', component: SCustomerDetailComponent },
 
   { path: 'supplier/sales', component: SSalesListComponent },
-  { path: 'supplier/sale/:id', component: PSaleDetailComponent },
+  { path: 'supplier/sale/:id', component: SSaleDetailComponent },
 
   { path: 'supplier/orders', component: SOrdersListComponent },
   { path: 'supplier/order/:id', component: SOrderDetailComponent },
@@ -49,11 +53,16 @@ const routes: Routes = [
   { path: 'pharmacy/inventory', component: PProductsListComponent },
   { path: 'pharmacy/inventory/product/:id', component: PProductDetailComponent },
 
+  { path: 'pharmacy/items', component: PItemsListComponent },
+  { path: 'pharmacy/item/product/:id', component: PItemDetailComponent },
+
   { path: 'pharmacy/sales', component: PSalesListComponent },
   { path: 'pharmacy/sale/:id', component: PSaleDetailComponent },
 
   { path: 'pharmacy/purchases', component: PPurchasesListComponent },
   { path: 'pharmacy/purchase/:id', component: PPurchaseDetailComponent },
+
+  { path: 'pharmacy/shopping-cart', component: PShoppingCartComponent },
 
   // Customers
   { path: 'customer/purchases', component: CPurchasesListComponent },

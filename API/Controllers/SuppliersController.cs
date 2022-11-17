@@ -76,11 +76,5 @@ namespace API.Controllers
 
             return Ok(sale);
         }
-
-        [HttpGet("orders")]
-        public async Task<ActionResult<IEnumerable<AppUser>>> GetOrders()
-        {
-            return Ok();
-        }
     }
 }
