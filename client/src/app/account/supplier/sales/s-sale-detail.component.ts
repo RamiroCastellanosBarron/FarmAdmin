@@ -29,7 +29,6 @@ import { SupplierService } from '../supplier.service';
     <div class="card shadow-sm">
       <div class="card-body">
       <span class="fs-5 fw-demibold">{{ sale.buyer.firstName }} {{ sale.buyer.lastName }}</span><br>
-      <span class="fs-6 fw-demibold">{{ sale.buyer.email }}</span><br>
       <span class="fs-6 fw-demibold">{{ sale.buyer.phoneNumber }}</span><br>
       </div>
     </div>

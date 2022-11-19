@@ -20,12 +20,12 @@ export class CustomersService {
     user: undefined
   };
 
-  private messageSource = new BehaviorSubject<Product>(this.product);
-  currentMessage = this.messageSource.asObservable();
+  private productSource = new BehaviorSubject<Product>(this.product);
+  currentProduct = this.productSource.asObservable();
 
-  changeMessage(product: Product) {
-    product.quantity = 1;
-    this.messageSource.next(product);
+  changeProduct(product: Product) {
+    // product.quantity = 1;
+    this.productSource.next(product);
   }
 
   constructor(private http: HttpClient) { }

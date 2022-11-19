@@ -21,7 +21,7 @@ import { Component, OnInit } from '@angular/core';
         <tbody>
           <tr
             *ngFor="let pharmacy of pharmacies"
-            routerLink="/account/customer/pharmacy/{{ pharmacy.id }}"
+            routerLink="/account/customer/pharmacies/{{ pharmacy.id }}"
             style="cursor: pointer"
           >
             <td class="ps-4">

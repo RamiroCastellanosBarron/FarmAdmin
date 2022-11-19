@@ -90,11 +90,22 @@ export class ShoppingCartComponent implements OnInit {
   user: any;
   product: Product;
 
+  resetProduct: Product = {
+    id: 0,
+    name: '',
+    description: '',
+    quantity: 0,
+    price: 0,
+    userId: 0,
+    user: undefined
+  };
+
   constructor(private customersService: CustomersService, private router: Router, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.getUser();
-    this.customersService.currentMessage.subscribe(product => this.product = product);
+    this.customersService.currentProduct.subscribe(product => this.product = product);
+    this.product.quantity = 1;
     console.log('product load', this.product);
   }
 
@@ -103,11 +114,11 @@ export class ShoppingCartComponent implements OnInit {
       console.log('pay response', response);
       this.router.navigateByUrl('account/customer/purchases');
       this.toastr.success('Producto pagado');
+      this.customersService.changeProduct(this.resetProduct);
     }, error => {
       console.log('pay error', error);
       this.toastr.error('Error de pago');
     })
-
   }
 
   add() {

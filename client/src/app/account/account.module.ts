@@ -27,8 +27,6 @@ import { SCustomersListComponent } from './supplier/customers/s-customers-list.c
 import { SCustomerDetailComponent } from './supplier/customers/s-customer-detail.component';
 import { SProductsListComponent } from './supplier/inventory/s-products-list.component';
 import { SProductDetailComponent } from './supplier/inventory/s-product-detail.component';
-import { SOrdersListComponent } from './supplier/orders/s-orders-list.component';
-import { SOrderDetailComponent } from './supplier/orders/s-order-detail.component';
 import { SSalesListComponent } from './supplier/sales/s-sales-list.component';
 import { SSaleDetailComponent } from './supplier/sales/s-sale-detail.component';
 import { ShoppingCartComponent } from './customer/c-shopping-cart.component';
@@ -61,8 +59,6 @@ import { PShoppingCartComponent } from './pharmacy/p-shopping-cart.component';
     SCustomerDetailComponent,
     SProductsListComponent,
     SProductDetailComponent,
-    SOrdersListComponent,
-    SOrderDetailComponent,
     SSalesListComponent,
     SSaleDetailComponent,
     ShoppingCartComponent,

@@ -1,7 +1,9 @@
+import { Router } from '@angular/router';
 import * as $ from 'jquery';
 import { Component, OnInit } from '@angular/core';
 import { User } from '../_models/user';
 import { AccountService } from '../_services/account.service';
+import { HighlightSpanKind } from 'typescript/lib/tsserverlibrary';
 
 @Component({
   selector: 'app-account',
@@ -31,13 +33,24 @@ import { AccountService } from '../_services/account.service';
   `]
 })
 export class AccountComponent implements OnInit {
+  role: string;
+  url: string;
 
-  constructor(private accountService: AccountService) {
+  constructor(private accountService: AccountService, private router: Router) {
 
   }
 
   ngOnInit(): void {
     this.setCurrentUser();
+    console.log('role', this.role);
+
+    if(this.role === 'supplier' || this.role === 'pharmacy') {
+      this.url = 'account/' + this.role + '/sales';
+    } else if(this.role === 'customer') {
+      this.url = 'account/' + this.role + '/purchases';
+    }
+
+    this.router.navigateByUrl(this.url);
 
     $(document).ready(function () {
       var html = $('html')
@@ -55,5 +68,7 @@ export class AccountComponent implements OnInit {
     if (user) {
       this.accountService.setCurrentUser(user);
     }
+
+    this.role = user.roles[0].toLowerCase();
   }
 }

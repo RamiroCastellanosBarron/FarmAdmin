@@ -116,15 +116,6 @@ import { AccountService } from '../_services/account.service';
               <i class="fa fa-tag"></i>
             </a>
           </li>
-          <li class="nav-item" *appHasRole="['Supplier']">
-            <a
-              class="nav-link"
-              routerLink="/account/supplier/orders"
-              routerLinkActive="active"
-              >Órdenes
-              <i class="fa fa-truck"></i>
-            </a>
-          </li>
           <!-- Customer -->
           <li class="nav-item" *appHasRole="['Customer']">
             <a
@@ -244,6 +235,10 @@ import { AccountService } from '../_services/account.service';
 
   `,
   styles: [`
+
+.navbar-nav .nav-link.active, .navbar-nav .show>.nav-link {
+  color: #0dcaf0 !important;
+}
 
 .dropdown-toggle, .dropdown-item {
   cursor: pointer;

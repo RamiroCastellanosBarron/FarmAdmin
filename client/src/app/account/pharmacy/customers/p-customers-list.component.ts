@@ -22,7 +22,7 @@ import { PharmaciesService } from '../pharmacies.service';
         <tbody>
           <tr
             *ngFor="let customer of customers"
-            routerLink="/account/pharmacy/customer/{{ customer.id }}"
+            routerLink="/account/pharmacy/customers/{{ customer.id }}"
             style="cursor: pointer"
           >
             <td class="ps-4">

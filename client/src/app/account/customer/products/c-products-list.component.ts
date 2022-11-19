@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   <div class="card shadow mb-5">
     <h3 class="card-header text-secondary fst-italic">
       <i class="fa fa-thermometer me-2 ms-3"></i>
-      Productos</h3>
+      Medicamentos</h3>
     <div class="card-body p-0">
       <table class="table table-striped table-hover mb-0 desktop">
         <thead>
@@ -22,7 +22,7 @@ import { Component, OnInit } from '@angular/core';
         <tbody>
           <tr
             *ngFor="let product of products"
-            routerLink="/account/customer/product/{{ product.id }}"
+            routerLink="/account/customer/products/{{ product.id }}"
             style="cursor: pointer"
           >
           <td class="ps-4">{{product.user.firstName}}</td>

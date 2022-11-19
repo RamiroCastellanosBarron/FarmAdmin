@@ -22,7 +22,7 @@ import { Component, OnInit } from '@angular/core';
         <tbody>
           <tr
             *ngFor="let product of products"
-            routerLink="/account/pharmacy/item/product/{{ product.id }}"
+            routerLink="/account/pharmacy/item/products/{{ product.id }}"
             style="cursor: pointer"
           >
           <td class="ps-4">{{product.user.firstName}}</td>

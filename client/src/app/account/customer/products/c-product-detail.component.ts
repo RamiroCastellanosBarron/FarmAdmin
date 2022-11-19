@@ -47,13 +47,13 @@ export class CProductDetailComponent implements OnInit {
   constructor(private customersService: CustomersService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
-    this.customersService.currentMessage.subscribe(product => this.producto = product);
+    this.customersService.currentProduct.subscribe(product => this.producto = product);
     this.getProduct();
   }
 
   add(product: Product) {
     console.log('add product', product);
-    this.customersService.changeMessage(product);
+    this.customersService.changeProduct(product);
   }
 
   back() {

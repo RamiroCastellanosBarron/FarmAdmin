@@ -9,8 +9,6 @@ import { CProductDetailComponent } from './customer/products/c-product-detail.co
 import { CProductsListComponent } from './customer/products/c-products-list.component';
 import { CPurchaseDetailComponent } from './customer/purchases/c-purchase-detail.component';
 import { CPurchasesListComponent } from './customer/purchases/c-purchases-list.component';
-import { SOrdersListComponent } from './supplier/orders/s-orders-list.component';
-import { SOrderDetailComponent } from './supplier/orders/s-order-detail.component';
 import { SCustomerDetailComponent } from './supplier/customers/s-customer-detail.component';
 import { SCustomersListComponent } from './supplier/customers/s-customers-list.component';
 import { SProductsListComponent } from './supplier/inventory/s-products-list.component';
@@ -31,48 +29,45 @@ import { SSalesListComponent } from './supplier/sales/s-sales-list.component';
 
 const routes: Routes = [
   // Suppliers
+  { path: 'supplier/customers', component: SCustomersListComponent },
+  { path: 'supplier/customers/:id', component: SCustomerDetailComponent },
+
   { path: 'supplier/inventory', component: SProductsListComponent },
   { path: 'supplier/inventory/product/:id', component: SProductDetailComponent },
 
-  { path: 'supplier/customers', component: SCustomersListComponent },
-  { path: 'supplier/customer/:id', component: SCustomerDetailComponent },
-
   { path: 'supplier/sales', component: SSalesListComponent },
-  { path: 'supplier/sale/:id', component: SSaleDetailComponent },
-
-  { path: 'supplier/orders', component: SOrdersListComponent },
-  { path: 'supplier/order/:id', component: SOrderDetailComponent },
+  { path: 'supplier/sales/:id', component: SSaleDetailComponent },
 
   // Pharmacies
   { path: 'pharmacy/customers', component: PCustomersListComponent },
-  { path: 'pharmacy/customer/:id', component: PCustomerDetailComponent },
+  { path: 'pharmacy/customers/:id', component: PCustomerDetailComponent },
 
   { path: 'pharmacy/suppliers', component: PSuppliersListComponent },
-  { path: 'pharmacy/supplier/:id', component: PSupplierDetailComponent },
+  { path: 'pharmacy/suppliers/:id', component: PSupplierDetailComponent },
 
   { path: 'pharmacy/inventory', component: PProductsListComponent },
   { path: 'pharmacy/inventory/product/:id', component: PProductDetailComponent },
 
   { path: 'pharmacy/items', component: PItemsListComponent },
-  { path: 'pharmacy/item/product/:id', component: PItemDetailComponent },
+  { path: 'pharmacy/items/product/:id', component: PItemDetailComponent },
 
   { path: 'pharmacy/sales', component: PSalesListComponent },
-  { path: 'pharmacy/sale/:id', component: PSaleDetailComponent },
+  { path: 'pharmacy/sales/:id', component: PSaleDetailComponent },
 
   { path: 'pharmacy/purchases', component: PPurchasesListComponent },
-  { path: 'pharmacy/purchase/:id', component: PPurchaseDetailComponent },
+  { path: 'pharmacy/purchases/:id', component: PPurchaseDetailComponent },
 
   { path: 'pharmacy/shopping-cart', component: PShoppingCartComponent },
 
   // Customers
   { path: 'customer/purchases', component: CPurchasesListComponent },
-  { path: 'customer/purchase/:id', component: CPurchaseDetailComponent },
+  { path: 'customer/purchases/:id', component: CPurchaseDetailComponent },
 
   { path: 'customer/products', component: CProductsListComponent },
-  { path: 'customer/product/:id', component: CProductDetailComponent },
+  { path: 'customer/products/:id', component: CProductDetailComponent },
 
   { path: 'customer/pharmacies', component: CPharmaciesListComponent },
-  { path: 'customer/pharmacy/:id', component: CPharmacyDetailComponent },
+  { path: 'customer/pharmacies/:id', component: CPharmacyDetailComponent },
 
   { path: 'customer/shopping-cart', component: ShoppingCartComponent },
 ];

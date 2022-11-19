@@ -24,7 +24,7 @@ import { Component, OnInit } from '@angular/core';
           <ng-container *ngIf="sales">
           <tr
             *ngFor="let sale of sales"
-            routerLink="/account/pharmacy/sale/{{ sale.id }}"
+            routerLink="/account/pharmacy/sales/{{ sale.id }}"
             style="cursor: pointer"
           >
             <td class="ps-4"> {{ sale.saleDate | date }}</td>
