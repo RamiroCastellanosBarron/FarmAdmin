@@ -10,17 +10,17 @@ import { SupplierService } from '../supplier.service';
     <h4 class="fst-italic">{{ product.name }}</h4>
     <p class="text-primary fst-semibold fs-3">{{ product.description }}</p>
     <div class="mb-3">
-    <span>Producto de: </span><span class="fst-semibold fst-italic text-info fs-4">{{product.user.firstName}}{{ product.user.lastName }}</span>
+    <span>Producto de: </span><span class="fst-semibold fst-italic text-info fs-4">{{product.supplierProducts[0].supplier.firstName}}{{ product.supplierProducts[0].supplier.lastName }}</span>
     <br>
-    <span class="text-secondary fst-italic">{{ product.user.address.street }} {{ product.user.address.number }}, {{ product.user.address.zipCode }}. {{ product.user.address.city }}, {{ product.user.address.country }}</span>
+    <span class="text-secondary fst-italic">{{ product.supplierProducts[0].supplier.address.street }} {{ product.supplierProducts[0].supplier.address.number }}, {{ product.supplierProducts[0].supplier.address.zipCode }}. {{ product.supplierProducts[0].supplier.address.city }}, {{ product.supplierProducts[0].supplier.address.country }}</span>
     <span class="fst-demibold text-secondary fs-3 fst-italic mx-3">|</span>
-    <i class="fa fa-phone me-2"></i><span class="text-secondary fst-demibold">{{ product.user.phoneNumber}}</span>
+    <i class="fa fa-phone me-2"></i><span class="text-secondary fst-demibold">{{ product.supplierProducts[0].supplier.phoneNumber}}</span>
     </div>
 
     <div class="card shadow-sm my-3">
       <div class="card-body">
         <h5 class="fst-italic fst-semibold">Disponibilidad</h5>
-        <span class="fs-4">{{ product.quantity }} </span><span class="fst-italic text-secondary fst-light"> ejemplares en tienda.</span>
+        <span class="fs-4">{{ product.supplierProducts[0].quantity }} </span><span class="fst-italic text-secondary fst-light"> ejemplares en tienda.</span>
       </div>
     </div>
 

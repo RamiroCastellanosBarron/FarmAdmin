@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Product } from '../_models/product';
+import { SupplierProduct } from '../_models/SupplierProduct';
 
 @Injectable({
   providedIn: 'root'
@@ -10,22 +10,20 @@ import { Product } from '../_models/product';
 export class PharmaciesService {
   baseUrl = environment.apiUrl;
 
-  product: Product = {
+  supplierProduct: SupplierProduct = {
     id: 0,
-    name: '',
-    description: '',
-    quantity: 0,
-    price: 0,
-    userId: 0,
-    user: undefined
-  };
+    idProduct: 0,
+    product: undefined,
+    idSupplier: 0,
+    supplier: undefined,
+    quantity: 0
+  }
 
-  private productSource = new BehaviorSubject<Product>(this.product);
+  private productSource = new BehaviorSubject<SupplierProduct>(this.supplierProduct);
   currentProduct = this.productSource.asObservable();
 
-  changeProduct(product: Product) {
-    product.quantity = 1;
-    this.productSource.next(product);
+  changeProduct(supplierProduct: SupplierProduct) {
+    this.productSource.next(supplierProduct);
   }
 
   constructor(private http: HttpClient) { }
@@ -82,7 +80,7 @@ export class PharmaciesService {
     return this.http.get(this.baseUrl + 'pharmacies/user');
   }
 
-  payProduct(product: Product) {
+  payProduct(product: SupplierProduct) {
     return this.http.post(this.baseUrl + 'pharmacies/buy', product);
   }
 

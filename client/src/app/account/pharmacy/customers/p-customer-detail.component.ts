@@ -40,7 +40,7 @@ import { subscribeOn } from 'rxjs';
           <ng-container *ngIf="purchases">
           <tr
             *ngFor="let purchase of purchases"
-            routerLink="/account/customer/purchases/{{ purchase.id }}"
+            routerLink="/account/pharmacy/purchases/{{ purchase.id }}"
             style="cursor: pointer"
           >
             <td class="ps-4"> {{ purchase.saleDate | date }}</td>

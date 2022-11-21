@@ -1,4 +1,5 @@
-﻿using API.Entities;
+﻿using API.DTOs;
+using API.Entities;
 using API.Extensions;
 using API.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -60,7 +61,7 @@ namespace API.Controllers
         }
 
         [HttpGet("sales")]
-        public async Task<ActionResult<IEnumerable<Sale>>> GetSales()
+        public async Task<ActionResult<IEnumerable<SaleDto>>> GetSales()
         {
             var sales = await _unitOfWork.SuppliersRepository.GetSales(User.GetUserId());
 

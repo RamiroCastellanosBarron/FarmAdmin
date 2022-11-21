@@ -29,7 +29,7 @@ import { PharmaciesService } from '../pharmacies.service';
               {{ customer.firstName }} {{customer.lastName }}
             </td>
             <td>{{ customer.email }}</td>
-            <td class="text-center">{{ customer.address.street }} {{ customer.address.number }}, {{customer.address.city }}</td>
+            <td>{{ customer.address.street }} {{ customer.address.number }}, {{customer.address.city }}</td>
             <td class="text-center">{{ customer.phoneNumber }}</td>
           </tr>
         </tbody>

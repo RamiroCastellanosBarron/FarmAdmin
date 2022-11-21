@@ -177,6 +177,58 @@ namespace API.Migrations
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
 
+            modelBuilder.Entity("API.Entities.InventoryPharmacy", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("PharmacyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PharmacyId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("PharmacyProducts");
+                });
+
+            modelBuilder.Entity("API.Entities.InventorySupplier", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SupplierId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.ToTable("SupplierProducts");
+                });
+
             modelBuilder.Entity("API.Entities.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -194,15 +246,7 @@ namespace API.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Products");
                 });
@@ -359,33 +403,60 @@ namespace API.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("API.Entities.Product", b =>
+            modelBuilder.Entity("API.Entities.InventoryPharmacy", b =>
                 {
-                    b.HasOne("API.Entities.AppUser", "User")
-                        .WithMany("Products")
-                        .HasForeignKey("UserId")
+                    b.HasOne("API.Entities.AppUser", "Pharmacy")
+                        .WithMany("PharmacyProducts")
+                        .HasForeignKey("PharmacyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.HasOne("API.Entities.Product", "Product")
+                        .WithMany("PharmacyProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pharmacy");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("API.Entities.InventorySupplier", b =>
+                {
+                    b.HasOne("API.Entities.Product", "Product")
+                        .WithMany("SupplierProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Entities.AppUser", "Supplier")
+                        .WithMany("SupplierProducts")
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Supplier");
                 });
 
             modelBuilder.Entity("API.Entities.Sale", b =>
                 {
                     b.HasOne("API.Entities.AppUser", "Buyer")
-                        .WithMany("ItemsBought")
+                        .WithMany("ProductsBought")
                         .HasForeignKey("BuyerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("API.Entities.Product", "Product")
-                        .WithMany("Sales")
+                        .WithMany("ProductSales")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("API.Entities.AppUser", "Seller")
-                        .WithMany("ItemsSold")
+                        .WithMany("ProductsSold")
                         .HasForeignKey("SellerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -445,18 +516,24 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Entities.AppUser", b =>
                 {
-                    b.Navigation("ItemsBought");
+                    b.Navigation("PharmacyProducts");
 
-                    b.Navigation("ItemsSold");
+                    b.Navigation("ProductsBought");
 
-                    b.Navigation("Products");
+                    b.Navigation("ProductsSold");
+
+                    b.Navigation("SupplierProducts");
 
                     b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("API.Entities.Product", b =>
                 {
-                    b.Navigation("Sales");
+                    b.Navigation("PharmacyProducts");
+
+                    b.Navigation("ProductSales");
+
+                    b.Navigation("SupplierProducts");
                 });
 #pragma warning restore 612, 618
         }

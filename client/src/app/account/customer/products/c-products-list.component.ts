@@ -21,17 +21,17 @@ import { Component, OnInit } from '@angular/core';
 
         <tbody>
           <tr
-            *ngFor="let product of products"
+            *ngFor="let product of pharmacyProducts"
             routerLink="/account/customer/products/{{ product.id }}"
             style="cursor: pointer"
           >
-          <td class="ps-4">{{product.user.firstName}}</td>
+          <td class="ps-4">{{product.pharmacy.firstName}}</td>
           <td>
-            {{ product.name }}
+            {{ product.product.name }}
           </td>
-            <td>{{ product.description }}</td>
+            <td>{{ product.product.description }}</td>
             <td class="text-center">
-              <span class="text-success fw-bold">{{ product.price | currency }}</span>
+              <span class="text-success fw-bold">{{ product.product.price | currency }}</span>
             </td>
           </tr>
         </tbody>
@@ -43,7 +43,7 @@ import { Component, OnInit } from '@angular/core';
   ]
 })
 export class CProductsListComponent implements OnInit {
-  products: any;
+  pharmacyProducts: any;
 
   constructor(private customersService: CustomersService) { }
 
@@ -53,10 +53,10 @@ export class CProductsListComponent implements OnInit {
 
   getProducts() {
     this.customersService.getProducts().subscribe(response => {
-      console.log('products response', response);
-      this.products = response;
+      console.log('pharmacyProducts response', response);
+      this.pharmacyProducts = response;
     }, error => {
-      console.log('products error', error);
+      console.log('pharmacyProducts error', error);
     })
   }
 

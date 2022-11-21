@@ -1,6 +1,8 @@
-﻿using API.Entities;
+﻿using API.DTOs;
+using API.Entities;
 using API.Interfaces;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
@@ -16,135 +18,108 @@ namespace API.Data
             _mapper = mapper;
         }
 
+        public async Task<bool> BuyProduct(InventoryPharmacy pharmacyProduct, int CustomerId)
+        {
+            if (pharmacyProduct == null)
+            {
+                return false;
+            }
+
+            var sale = new Sale()
+            {
+                BuyerId = CustomerId,
+                SellerId = pharmacyProduct.PharmacyId,
+                ProductId = pharmacyProduct.ProductId,
+                Quantity = pharmacyProduct.Quantity,
+            };
+
+            await _context.Sales.AddAsync(sale);
+
+            var pharmaProduct = await _context.PharmacyProducts
+                .FirstOrDefaultAsync(x => x.Id == pharmacyProduct.Id);
+
+            pharmaProduct.Quantity -= pharmacyProduct.Quantity;
+
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
         public async Task<IEnumerable<AppUser>> GetPharmacies()
         {
-            var pharmaciesList = new List<AppUser>();
+            var pharmacies = new List<AppUser>();
 
-            var pharmacies = await _context.Users
+            var users = await _context.Users
                 .Include(x => x.UserRoles)
                 .ToListAsync();
 
-            foreach (var pharmacy in pharmacies)
+            foreach (var user in users)
             {
-                foreach (var p in pharmacy.UserRoles)
+                foreach(var u in user.UserRoles)
                 {
-                    if (p.RoleId == 2) pharmaciesList.Add(pharmacy);
+                    if(u.RoleId == 2)
+                    {
+                        pharmacies.Add(user);
+                    }
                 }
             }
 
-            return pharmaciesList;
+            return pharmacies;
         }
 
-        public async Task<AppUser> GetPharmacy(int id)
+        public async Task<IEnumerable<InventoryPharmacy>> GetPharmacyProducts(int id)
         {
-            var pharmacy = await _context.Users
-                .Include(x => x.Products)
-                .SingleOrDefaultAsync(x => x.Id == id);
-
-            return pharmacy;
-        }
-
-        public async Task<Product> GetProduct(int id)
-        {
-            var product = await _context.Products
-                .Include(x => x.User)
-                .SingleOrDefaultAsync(x => x.Id == id);
-
-            return product;
-        }
-
-        public async Task<IEnumerable<Product>> GetProducts()
-        {
-            var pharmaciesList = new List<AppUser>();
-
-            var productsList = new List<Product>();
-
-            var pharmaciesIds = new List<int>();
-
-            var products = await _context.Products
-                .Include(x => x.User)
-                .ToListAsync();
-
-            var pharmacies = await _context.Users
-                .Include(x => x.UserRoles)
-                .ToListAsync();
-
-            foreach (var pharmacy in pharmacies)
-            {
-                foreach (var p in pharmacy.UserRoles)
-                {
-                    if (p.RoleId == 2) pharmaciesList.Add(pharmacy);
-                }
-            }
-
-            foreach (var pharmacy in pharmaciesList)
-            {
-                pharmaciesIds.Add(pharmacy.Id);
-            }
-
-            foreach (var product in products)
-            {
-                for(int i = 0; i < pharmaciesList.Count - 1; i++)
-                {
-                    if (product.UserId == pharmaciesIds[i]) productsList.Add(product);
-                }
-            }
-
-            return productsList;
-        }
-
-        public async Task<IEnumerable<Sale>> GetPurchases(int id)
-        {
-            var purchasesList = new List<Sale>();
-
-            var purchases = await _context.Sales
+            var pharmacyProducts = await _context.PharmacyProducts
+                .Include(x => x.Pharmacy)
                 .Include(x => x.Product)
-                .Include(x => x.Seller)
-                .Include(x => x.Buyer)
-                .Where(x => x.BuyerId == id)
-                .OrderByDescending(x => x.SaleDate)
+                .Where(x => x.PharmacyId== id)
                 .ToListAsync();
 
-            foreach (var purchase in purchases)
-            {
-                if (purchase.BuyerId == id) purchasesList.Add(purchase);
-            }
+            return pharmacyProducts;
+        }
 
-            return purchasesList;
+        public async Task<InventoryPharmacy> GetProduct(int id)
+        {
+            var pharmacyProduct = await _context.PharmacyProducts
+                .Include(x => x.Product)
+                .Include(x => x.Pharmacy)
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            return pharmacyProduct;
+        }
+
+        public async Task<IEnumerable<InventoryPharmacyDto>> GetProducts()
+        {
+            var pharmacyProducts = await _context.PharmacyProducts
+                .Include(x => x.Product)
+                .Include(x => x.Pharmacy)
+                .ProjectTo<InventoryPharmacyDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            return pharmacyProducts;
         }
 
         public async Task<Sale> GetPurchase(int id)
         {
-            var sale = await _context.Sales
+            var purchase = await _context.Sales
+                .Include(x => x.Product)
                 .Include(x => x.Seller)
                 .Include(x => x.Buyer)
-                .Include(x => x.Product)
                 .SingleOrDefaultAsync(x => x.Id == id);
 
-            return sale;
+            return purchase;
         }
 
-        public async Task<bool> BuyProduct(Product product, int CustomerId)
+        public async Task<IEnumerable<Sale>> GetPurchases(int id)
         {
-            if (product == null) return false;
+            var sales = await _context.Sales
+                .Include(x => x.Product)
+                .Include(x => x.Seller)
+                .OrderByDescending(x => x.SaleDate)
+                .Where(x => x.BuyerId == id)
+                .ToListAsync();
 
-            var sale = new Sale()
-            {
-                Quantity= product.Quantity,
-                ProductId = product.Id,
-                SellerId = product.UserId,
-                BuyerId = CustomerId
-            };
-
-            var prod = await _context.Products
-                .SingleOrDefaultAsync(x => x.Id == product.Id);
-
-            prod.Quantity-=product.Quantity;
-
-            await _context.Sales.AddAsync(sale);
-            await _context.SaveChangesAsync();
-
-            return true;
+            return sales;
         }
 
         public async Task<AppUser> GetUser(int id)

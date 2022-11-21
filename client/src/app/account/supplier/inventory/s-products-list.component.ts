@@ -27,11 +27,11 @@ import { Item } from '../../_models/item';
             style="cursor: pointer"
           >
             <td class="ps-4">
-              {{ item.name }}
+              {{ item.product.name }}
             </td>
-            <td>{{ item.description }}</td>
+            <td>{{ item.product.description }}</td>
             <td class="text-center">
-              {{ item.price | currency }}
+              {{ item.product.price | currency }}
             </td>
             <td class="text-center">{{item.quantity | number}}</td>
           </tr>

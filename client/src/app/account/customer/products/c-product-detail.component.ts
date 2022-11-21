@@ -2,26 +2,26 @@ import { CPharmacyDetailComponent } from './../pharmacies/c-pharmacy-detail.comp
 import { ActivatedRoute, Router } from '@angular/router';
 import { CustomersService } from './../customers.service';
 import { Component, OnInit } from '@angular/core';
-import { Product } from '../../_models/product';
+import { PharmacyProduct } from '../../_models/PharmacyProduct';
 
 @Component({
   selector: 'app-c-product-detail',
   template: `
-  <div *ngIf="product">
-    <h4 class="fst-italic">{{ product.name }}</h4>
-    <p class="text-primary fst-semibold fs-3">{{ product.description }}</p>
+  <div *ngIf="pharmacyProduct">
+    <h4 class="fst-italic">{{ pharmacyProduct.product.name }}</h4>
+    <p class="text-primary fst-semibold fs-3">{{ pharmacyProduct.product.description }}</p>
     <div class="mb-3">
-    <span>Producto de: </span><span class="fst-semibold fst-italic text-info fs-4">{{product.user.firstName}}{{ product.user.lastName }}</span>
+    <span>Producto de: </span><span class="fst-semibold fst-italic text-info fs-4">{{pharmacyProduct.pharmacy.firstName}}{{ pharmacyProduct.pharmacy.lastName }}</span>
     <br>
-    <span class="text-secondary fst-italic">{{ product.user.address.street }} {{ product.user.address.number }}, {{ product.user.address.zipCode }}. {{ product.user.address.city }}, {{ product.user.address.country }}</span>
+    <span class="text-secondary fst-italic">{{ pharmacyProduct.pharmacy.address.street }} {{ pharmacyProduct.pharmacy.address.number }}, {{ pharmacyProduct.pharmacy.address.zipCode }}. {{ pharmacyProduct.pharmacy.address.city }}, {{ pharmacyProduct.pharmacy.address.country }}</span>
     <span class="fst-demibold text-secondary fs-3 fst-italic mx-3">|</span>
-    <i class="fa fa-phone me-2"></i><span class="text-secondary fst-demibold">{{ product.user.phoneNumber}}</span>
+    <i class="fa fa-phone me-2"></i><span class="text-secondary fst-demibold">{{ pharmacyProduct.pharmacy.phoneNumber}}</span>
     </div>
 
     <div class="card shadow-sm my-3">
       <div class="card-body">
         <h5 class="fst-italic fst-semibold">Disponibilidad</h5>
-        <span class="fs-4">{{ product.quantity }} </span><span class="fst-italic text-secondary fst-light"> ejemplares en tienda.</span>
+        <span class="fs-4">{{ pharmacyProduct.quantity }} </span><span class="fst-italic text-secondary fst-light"> ejemplares en tienda.</span>
       </div>
     </div>
 
@@ -29,7 +29,7 @@ import { Product } from '../../_models/product';
       <button class="btn btn-outline-secondary shadow-sm me-2" (click)="back()">
         <i class="fa fa-angle-left me-2"></i>
         Atrás</button>
-    <button class="btn btn-success shadow" (click)="add(product)">
+    <button class="btn btn-success shadow" (click)="add(pharmacyProduct)">
       <i class="fa fa-shopping-cart me-2"></i>
       Agregar al carrito
       <i class="fa fa-plus ms-2"></i>
@@ -41,19 +41,19 @@ import { Product } from '../../_models/product';
   ]
 })
 export class CProductDetailComponent implements OnInit {
-  product: any;
-  producto: Product;
+  pharmacyProduct: any;
+  producto: PharmacyProduct;
 
   constructor(private customersService: CustomersService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
-    this.customersService.currentProduct.subscribe(product => this.producto = product);
+    this.customersService.currentProduct.subscribe(pharmacyProduct => this.producto = pharmacyProduct);
     this.getProduct();
   }
 
-  add(product: Product) {
-    console.log('add product', product);
-    this.customersService.changeProduct(product);
+  add(pharmacyProduct: PharmacyProduct) {
+    console.log('add pharmacyProduct', pharmacyProduct);
+    this.customersService.changeProduct(pharmacyProduct);
   }
 
   back() {
@@ -62,10 +62,10 @@ export class CProductDetailComponent implements OnInit {
 
   getProduct() {
     this.customersService.getProduct(this.route.snapshot.paramMap.get('id')).subscribe(response => {
-      console.log('product response', response);
-      this.product = response;
+      console.log('pharmacyProduct response', response);
+      this.pharmacyProduct = response;
     }, error => {
-      console.log('product error', error);
+      console.log('pharmacyProduct error', error);
     })
   }
 

@@ -6,14 +6,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-c-pharmacy-detail',
   template: `
-  <div *ngIf="pharmacy">
-    <h4 class="">{{ pharmacy.firstName }} {{ pharmacy.lastName }}</h4>
-    <span class="fs-5 fw-demibold text-secondary fst-italic">{{ pharmacy.address.street }} {{ pharmacy.address.number }}, {{ pharmacy.address.zipCode }}. {{ pharmacy.address.city }}, {{ pharmacy.address.country }}</span>
+  <div *ngIf="pharmacyProducts">
+    <h4 class="">{{ pharmacyProducts[0].pharmacy.firstName }} {{ pharmacyProducts[0].pharmacy.lastName }}</h4>
+    <span class="fs-5 fw-demibold text-secondary fst-italic">{{ pharmacyProducts[0].pharmacy.address.street }} {{ pharmacyProducts[0].pharmacy.address.number }}, {{ pharmacyProducts[0].pharmacy.address.zipCode }}. {{ pharmacyProducts[0].pharmacy.address.city }}, {{ pharmacyProducts[0].pharmacy.address.country }}</span>
 
     <div class="mb-4">
-    <span class="fst-italic fs-6 fw-semibold text-info"><i class="fa fa-phone me-1"></i>{{ pharmacy.phoneNumber }}</span>
+    <span class="fst-italic fs-6 fw-semibold text-info"><i class="fa fa-phone me-1"></i>{{ pharmacyProducts[0].pharmacy.phoneNumber }}</span>
     </div>
-    <div class="card shadow mb-5">
+    <div class="card shadow mb-3">
     <h3 class="card-header text-secondary fst-italic">
       <i class="fa fa-thermometer me-2 ms-3"></i>
       Productos</h3>
@@ -29,28 +29,35 @@ import { ActivatedRoute, Router } from '@angular/router';
 
         <tbody>
           <tr
-            *ngFor="let product of pharmacy.products"
+            *ngFor="let product of pharmacyProducts"
             routerLink="/account/customer/products/{{ product.id }}"
             style="cursor: pointer"
           >
           <td class="ps-4">
-            {{ product.name }}
+            {{ product.product.name }}
           </td>
-            <td>{{ product.description }}</td>
+            <td>{{ product.product.description }}</td>
             <td class="text-center">
-              <span class="text-success fw-bold">{{ product.price | currency }}</span>
+              <span class="text-success fw-bold">{{ product.product.price | currency }}</span>
             </td>
           </tr>
         </tbody>
       </table>
+
     </div>
+
   </div>
+  <div class="mb-5">
+      <button class="btn btn-outline-secondary shadow-sm me-2" (click)="back()">
+        <i class="fa fa-angle-left me-2"></i>
+        Atrás</button>
+    </div>
   `,
   styles: [
   ]
 })
 export class CPharmacyDetailComponent implements OnInit {
-  pharmacy: any;
+  pharmacyProducts: any;
 
   constructor(private customersService: CustomersService, private route: ActivatedRoute, private router: Router) { }
 
@@ -64,10 +71,10 @@ export class CPharmacyDetailComponent implements OnInit {
 
   getPharmacy() {
     this.customersService.getPharmacy(this.route.snapshot.paramMap.get('id')).subscribe(response => {
-      console.log('pharmacy response', response);
-      this.pharmacy = response;
+      console.log('pharmacyProducts response', response);
+      this.pharmacyProducts = response;
     }, error => {
-      console.log('pharmacy error', error);
+      console.log('pharmacyProducts error', error);
     })
   }
 

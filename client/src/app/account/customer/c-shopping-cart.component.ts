@@ -1,17 +1,17 @@
 import { ToastrService } from 'ngx-toastr';
-import { Product } from '../_models/product';
 import { CustomersService } from './customers.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { PharmacyProduct } from '../_models/PharmacyProduct';
 
 @Component({
   selector: 'app-shopping-cart',
   template: `
   <div>
-    <div *ngIf="product.id === 0">
+    <div *ngIf="pharmacyProduct.id === 0">
       <h4>No hay productos</h4>
     </div>
-    <div *ngIf="product.id !== 0">
+    <div *ngIf="pharmacyProduct.id !== 0">
 
     <div class="">
       <span class="text-mute fs-4 me-2">Compra No.</span><span class="text-info fs-3 fst-italic fw-semibold">
@@ -35,8 +35,8 @@ import { Router } from '@angular/router';
     </div>
     <div class="card shadow-sm">
       <div class="card-body">
-      <span class="fs-4 fw-semibold text-secondary">{{ product.user.firstName }}{{ product.user.lastName }}</span><br>
-      <span class="text-primary fw-light fst-italic">{{ product.user.address.street }} {{ product.user.address.number }}, {{ product.user.address.zipCode }}. {{ product.user.address.city }}, {{ product.user.address.country }}</span>
+      <span class="fs-4 fw-semibold text-secondary">{{ pharmacyProduct.pharmacy.firstName }}{{ pharmacyProduct.pharmacy.lastName }}</span><br>
+      <span class="text-primary fw-light fst-italic">{{ pharmacyProduct.pharmacy.address.street }} {{ pharmacyProduct.pharmacy.address.number }}, {{ pharmacyProduct.pharmacy.address.zipCode }}. {{ pharmacyProduct.pharmacy.address.city }}, {{ pharmacyProduct.pharmacy.address.country }}</span>
       </div>
     </div>
     <div class="my-2">
@@ -54,8 +54,8 @@ import { Router } from '@angular/router';
     </div>
     <div class="row">
       <div class="my-2 d-flex align-items-center col-10">
-        <div class="ms-5"><span class="fs-5 fw-demibold">{{ product.name }}, {{ product.description }}</span><br><span class="ms-2 fw-light">{{ product.price | currency }}</span></div>
-        <span class="fs-6 text-primary fw-semibold ms-5">({{ product.quantity }} piezas)</span>
+        <div class="ms-5"><span class="fs-5 fw-demibold">{{ pharmacyProduct.product.name }}, {{ pharmacyProduct.product.description }}</span><br><span class="ms-2 fw-light">{{ pharmacyProduct.product.price | currency }}</span></div>
+        <span class="fs-6 text-primary fw-semibold ms-5">({{ pharmacyProduct.quantity }} piezas)</span>
       </div>
 
       <div class="col-2 d-flex justify-content-end">
@@ -69,7 +69,7 @@ import { Router } from '@angular/router';
 
     <hr>
     <div class="my-3">
-      <span class="fs-5 fw-demibold text-secondary">Monto: </span><span class="fs-3 fw-light ms-2">{{product.quantity * product.price | currency }} </span><span class="text-success fw-bold fs-6 fst-italic">MXN</span>
+      <span class="fs-5 fw-demibold text-secondary">Monto: </span><span class="fs-3 fw-light ms-2">{{pharmacyProduct.quantity * pharmacyProduct.product.price | currency }} </span><span class="text-success fw-bold fs-6 fst-italic">MXN</span>
     </div>
     <div class="mt-5">
       <button class="btn btn-outline-secondary shadow-sm me-2" (click)="back()">
@@ -88,29 +88,28 @@ import { Router } from '@angular/router';
 })
 export class ShoppingCartComponent implements OnInit {
   user: any;
-  product: Product;
+  pharmacyProduct: PharmacyProduct;
 
-  resetProduct: Product = {
+  resetProduct: PharmacyProduct = {
     id: 0,
-    name: '',
-    description: '',
-    quantity: 0,
-    price: 0,
-    userId: 0,
-    user: undefined
+    idProduct: 0,
+    product: undefined,
+    idPharmacy: 0,
+    pharmacy: undefined,
+    quantity: 0
   };
 
   constructor(private customersService: CustomersService, private router: Router, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.getUser();
-    this.customersService.currentProduct.subscribe(product => this.product = product);
-    this.product.quantity = 1;
-    console.log('product load', this.product);
+    this.customersService.currentProduct.subscribe(pharmacyProduct => this.pharmacyProduct = pharmacyProduct);
+    this.pharmacyProduct.quantity = 1;
+    console.log('pharmacyProduct load', this.pharmacyProduct);
   }
 
   pay() {
-    this.customersService.payProduct(this.product).subscribe(response => {
+    this.customersService.payProduct(this.pharmacyProduct).subscribe(response => {
       console.log('pay response', response);
       this.router.navigateByUrl('account/customer/purchases');
       this.toastr.success('Producto pagado');
@@ -122,11 +121,11 @@ export class ShoppingCartComponent implements OnInit {
   }
 
   add() {
-    this.product.quantity++;
+    this.pharmacyProduct.quantity++;
   }
 
   rest() {
-    this.product.quantity--;
+    this.pharmacyProduct.quantity--;
   }
 
   getUser() {

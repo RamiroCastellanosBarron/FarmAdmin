@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Product } from '../_models/product';
+import { PharmacyProduct } from '../_models/PharmacyProduct';
 
 @Injectable({
   providedIn: 'root'
@@ -10,22 +10,21 @@ import { Product } from '../_models/product';
 export class CustomersService {
   baseUrl = environment.apiUrl;
 
-  product: Product = {
+  pharmacyProduct: PharmacyProduct = {
     id: 0,
-    name: '',
-    description: '',
-    quantity: 0,
-    price: 0,
-    userId: 0,
-    user: undefined
-  };
+    idProduct: 0,
+    product: undefined,
+    idPharmacy: 0,
+    pharmacy: undefined,
+    quantity: 0
+  }
 
-  private productSource = new BehaviorSubject<Product>(this.product);
+  private productSource = new BehaviorSubject<PharmacyProduct>(this.pharmacyProduct);
   currentProduct = this.productSource.asObservable();
 
-  changeProduct(product: Product) {
-    // product.quantity = 1;
-    this.productSource.next(product);
+  changeProduct(pharmacyProduct: PharmacyProduct) {
+    // pharmacyProduct.quantity = 1;
+    this.productSource.next(pharmacyProduct);
   }
 
   constructor(private http: HttpClient) { }
@@ -58,8 +57,8 @@ export class CustomersService {
     return this.http.get(this.baseUrl + 'customers/user');
   }
 
-  payProduct(product: Product) {
-    return this.http.post(this.baseUrl + 'customers/buy', product);
+  payProduct(pharmacyProduct: PharmacyProduct) {
+    return this.http.post(this.baseUrl + 'customers/buy', pharmacyProduct);
   }
 
 }

@@ -1,4 +1,5 @@
-﻿using API.Entities;
+﻿using API.DTOs;
+using API.Entities;
 using API.Extensions;
 using API.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -52,7 +53,7 @@ namespace API.Controllers
         [HttpGet("sales")]
         public async Task<ActionResult<IEnumerable<Sale>>> GetSales()
         {
-            var sales = await _unitOfWork.PharmaciesRepository.GetSales(User.GetUsername());
+            var sales = await _unitOfWork.PharmaciesRepository.GetSales(User.GetUserId());
 
             return Ok(sales);
         }
@@ -66,7 +67,7 @@ namespace API.Controllers
         }
 
         [HttpGet("purchases")]
-        public async Task<ActionResult<IEnumerable<Sale>>> GetPurchases()
+        public async Task<ActionResult<IEnumerable<SaleDto>>> GetPurchases()
         {
             var purchases = await _unitOfWork.PharmaciesRepository.GetPurchases(User.GetUserId());
 
@@ -82,15 +83,15 @@ namespace API.Controllers
         }
 
         [HttpGet("products")]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<InventoryPharmacy>>> GetProducts()
         {
-            var products = await _unitOfWork.PharmaciesRepository.GetProducts(User.GetUsername());
+            var products = await _unitOfWork.PharmaciesRepository.GetProducts(User.GetUserId());
 
             return Ok(products);
         }
 
         [HttpGet("products/{id}")]
-        public async Task<ActionResult<Product>> GetProduct(int id)
+        public async Task<ActionResult<InventoryPharmacy>> GetProduct(int id)
         {
             var product = await _unitOfWork.PharmaciesRepository.GetProduct(id);
 
@@ -98,7 +99,7 @@ namespace API.Controllers
         }
 
         [HttpGet("items")]
-        public async Task<ActionResult<IEnumerable<Product>>> GetItems()
+        public async Task<ActionResult<IEnumerable<InventorySupplierDto>>> GetItems()
         {
             var products = await _unitOfWork.PharmaciesRepository.GetItems();
 
@@ -122,9 +123,9 @@ namespace API.Controllers
         }
 
         [HttpPost("buy")]
-        public async Task<ActionResult<string>> BuyProduct(Product product)
+        public async Task<ActionResult<string>> BuyProduct(InventorySupplier supplierProduct)
         {
-            var response = await _unitOfWork.PharmaciesRepository.BuyProduct(product, User.GetUserId());
+            var response = await _unitOfWork.PharmaciesRepository.BuyProduct(supplierProduct, User.GetUserId());
 
             if (response == false) return BadRequest();
 

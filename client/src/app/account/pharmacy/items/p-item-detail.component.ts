@@ -1,20 +1,20 @@
 import { PharmaciesService } from './../pharmacies.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Product } from '../../_models/product';
+import { SupplierProduct } from '../../_models/SupplierProduct';
 
 @Component({
   selector: 'app-p-item-detail',
   template: `
     <div *ngIf="product">
-    <h4 class="fst-italic">{{ product.name }}</h4>
-    <p class="text-primary fst-semibold fs-3">{{ product.description }}</p>
+    <h4 class="fst-italic">{{ product.product.name }}</h4>
+    <p class="text-primary fst-semibold fs-3">{{ product.product.description }}</p>
     <div class="mb-3">
-    <span>Producto de: </span><span class="fst-semibold fst-italic text-info fs-4">{{product.user.firstName}}{{ product.user.lastName }}</span>
+    <span>Producto de: </span><span class="fst-semibold fst-italic text-info fs-4">{{product.supplier.firstName}}{{ product.supplier.lastName }}</span>
     <br>
-    <span class="text-secondary fst-italic">{{ product.user.address.street }} {{ product.user.address.number }}, {{ product.user.address.zipCode }}. {{ product.user.address.city }}, {{ product.user.address.country }}</span>
+    <span class="text-secondary fst-italic">{{ product.supplier.address.street }} {{ product.supplier.address.number }}, {{ product.supplier.address.zipCode }}. {{ product.supplier.address.city }}, {{ product.supplier.address.country }}</span>
     <span class="fst-demibold text-secondary fs-3 fst-italic mx-3">|</span>
-    <i class="fa fa-phone me-2"></i><span class="text-secondary fst-demibold">{{ product.user.phoneNumber}}</span>
+    <i class="fa fa-phone me-2"></i><span class="text-secondary fst-demibold">{{ product.supplier.phoneNumber}}</span>
     </div>
 
     <div class="card shadow-sm my-3">
@@ -41,7 +41,7 @@ import { Product } from '../../_models/product';
 })
 export class PItemDetailComponent implements OnInit {
   product: any;
-  producto: Product;
+  producto: SupplierProduct;
 
   constructor(private pharmaciesService: PharmaciesService, private route: ActivatedRoute, private router: Router) { }
 
@@ -54,13 +54,13 @@ export class PItemDetailComponent implements OnInit {
     this.router.navigateByUrl('account/pharmacy/items');
   }
 
-  add(product: Product) {
+  add(product: SupplierProduct) {
     console.log('add product', product);
     this.pharmaciesService.changeProduct(product);
   }
 
   getProduct() {
-    this.pharmaciesService.getProduct(this.route.snapshot.paramMap.get('id')).subscribe(response => {
+    this.pharmaciesService.getItem(this.route.snapshot.paramMap.get('id')).subscribe(response => {
       console.log('product response', response);
       this.product = response;
     }, error => {

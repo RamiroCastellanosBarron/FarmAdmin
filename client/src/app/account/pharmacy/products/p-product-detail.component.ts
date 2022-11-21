@@ -7,14 +7,14 @@ import { PharmaciesService } from '../pharmacies.service';
   selector: 'app-p-product-detail',
   template: `
   <div *ngIf="product">
-    <h4 class="fst-italic">{{ product.name }}</h4>
-    <p class="text-primary fst-semibold fs-3">{{ product.description }}</p>
+    <h4 class="fst-italic">{{ product.product.name }}</h4>
+    <p class="text-primary fst-semibold fs-3">{{ product.product.description }}</p>
     <div class="mb-3">
-    <span>Producto de: </span><span class="fst-semibold fst-italic text-info fs-4">{{product.user.firstName}}{{ product.user.lastName }}</span>
+    <span>Producto de: </span><span class="fst-semibold fst-italic text-info fs-4">{{product.pharmacy.firstName}}{{ product.pharmacy.lastName }}</span>
     <br>
-    <span class="text-secondary fst-italic">{{ product.user.address.street }} {{ product.user.address.number }}, {{ product.user.address.zipCode }}. {{ product.user.address.city }}, {{ product.user.address.country }}</span>
+    <span class="text-secondary fst-italic">{{ product.pharmacy.address.street }} {{ product.pharmacy.address.number }}, {{ product.pharmacy.address.zipCode }}. {{ product.pharmacy.address.city }}, {{ product.pharmacy.address.country }}</span>
     <span class="fst-demibold text-secondary fs-3 fst-italic mx-3">|</span>
-    <i class="fa fa-phone me-2"></i><span class="text-secondary fst-demibold">{{ product.user.phoneNumber}}</span>
+    <i class="fa fa-phone me-2"></i><span class="text-secondary fst-demibold">{{ product.pharmacy.phoneNumber}}</span>
     </div>
 
     <div class="card shadow-sm my-3">

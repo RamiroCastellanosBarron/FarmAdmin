@@ -1,18 +1,19 @@
-﻿using API.Entities;
+﻿using API.DTOs;
+using API.Entities;
 
 namespace API.Interfaces
 {
     public interface ICustomersRepository
     {
         Task<IEnumerable<AppUser>> GetPharmacies();
-        Task<IEnumerable<Product>> GetProducts();
+        Task<IEnumerable<InventoryPharmacyDto>> GetProducts();
         Task<IEnumerable<Sale>> GetPurchases(int id);
 
-        Task<AppUser> GetPharmacy(int id);
-        Task<Product> GetProduct(int id);
+        Task<IEnumerable<InventoryPharmacy>> GetPharmacyProducts(int id);
+        Task<InventoryPharmacy> GetProduct(int id);
         Task<Sale> GetPurchase(int id);
 
-        Task<bool> BuyProduct(Product product, int CustomerId);
+        Task<bool> BuyProduct(InventoryPharmacy pharmacyProduct, int CustomerId);
         Task<AppUser> GetUser(int id);
     }
 }

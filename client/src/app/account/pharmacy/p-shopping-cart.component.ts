@@ -2,16 +2,16 @@ import { PharmaciesService } from './pharmacies.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Product } from '../_models/product';
+import { SupplierProduct } from '../_models/SupplierProduct';
 
 @Component({
   selector: 'app-p-shopping-cart',
   template: `
     <div>
-    <div *ngIf="product.id === 0">
+    <div *ngIf="supplierProduct.id === 0">
       <h4>No hay productos</h4>
     </div>
-    <div *ngIf="product.id !== 0">
+    <div *ngIf="supplierProduct.id !== 0">
 
     <div class="">
       <span class="text-mute fs-4 me-2">Compra No.</span><span class="text-info fs-3 fst-italic fw-semibold">
@@ -35,8 +35,8 @@ import { Product } from '../_models/product';
     </div>
     <div class="card shadow-sm">
       <div class="card-body">
-      <span class="fs-4 fw-semibold text-secondary">{{ product.user.firstName }}{{ product.user.lastName }}</span><br>
-      <span class="text-primary fw-light fst-italic">{{ product.user.address.street }} {{ product.user.address.number }}, {{ product.user.address.zipCode }}. {{ product.user.address.city }}, {{ product.user.address.country }}</span>
+      <span class="fs-4 fw-semibold text-secondary">{{ supplierProduct.supplier.firstName }}{{ supplierProduct.supplier.lastName }}</span><br>
+      <span class="text-primary fw-light fst-italic">{{ supplierProduct.supplier.address.street }} {{ supplierProduct.supplier.address.number }}, {{ supplierProduct.supplier.address.zipCode }}. {{ supplierProduct.supplier.address.city }}, {{ supplierProduct.supplier.address.country }}</span>
       </div>
     </div>
     <div class="my-2">
@@ -45,7 +45,6 @@ import { Product } from '../_models/product';
     <div class="card shadow-sm" *ngIf="user">
       <div class="card-body">
       <span class="fs-5 fw-demibold">{{ user.firstName }} {{ user.lastName }}</span><br>
-      <span class="fs-6 fw-demibold">{{ user.email }}</span><br>
       <span class="fs-6 fw-demibold">{{ user.phoneNumber }}</span><br>
       </div>
     </div>
@@ -54,8 +53,8 @@ import { Product } from '../_models/product';
     </div>
     <div class="row">
       <div class="my-2 d-flex align-items-center col-10">
-        <div class="ms-5"><span class="fs-5 fw-demibold">{{ product.name }}, {{ product.description }}</span><br><span class="ms-2 fw-light">{{ product.price | currency }}</span></div>
-        <span class="fs-6 text-primary fw-semibold ms-5">({{ product.quantity }} piezas)</span>
+        <div class="ms-5"><span class="fs-5 fw-demibold">{{ supplierProduct.product.name }}, {{ supplierProduct.product.description }}</span><br><span class="ms-2 fw-light">{{ supplierProduct.product.price | currency }}</span></div>
+        <span class="fs-6 text-primary fw-semibold ms-5">({{ supplierProduct.quantity }} piezas)</span>
       </div>
 
       <div class="col-2 d-flex justify-content-end">
@@ -69,7 +68,7 @@ import { Product } from '../_models/product';
 
     <hr>
     <div class="my-3">
-      <span class="fs-5 fw-demibold text-secondary">Monto: </span><span class="fs-3 fw-light ms-2">{{product.quantity * product.price | currency }} </span><span class="text-success fw-bold fs-6 fst-italic">MXN</span>
+      <span class="fs-5 fw-demibold text-secondary">Monto: </span><span class="fs-3 fw-light ms-2">{{supplierProduct.quantity * supplierProduct.product.price | currency }} </span><span class="text-success fw-bold fs-6 fst-italic">MXN</span>
     </div>
     <div class="mt-5">
       <button class="btn btn-outline-secondary shadow-sm me-2" (click)="back()">
@@ -88,20 +87,25 @@ import { Product } from '../_models/product';
 })
 export class PShoppingCartComponent implements OnInit {
   user: any;
-  product: Product;
+  supplierProduct: SupplierProduct;
 
   constructor(private pharmaciesService: PharmaciesService, private router: Router, private toastr: ToastrService) { }
 
+  back() {
+    this.router.navigateByUrl('account/pharmacy/purchases');
+  }
+
   ngOnInit(): void {
     this.getUser();
-    this.pharmaciesService.currentProduct.subscribe(product => this.product = product);
-    console.log('product load', this.product);
+    this.pharmaciesService.currentProduct.subscribe(supplierProduct => this.supplierProduct = supplierProduct);
+    this.supplierProduct.quantity = 1;
+    console.log('supplierProduct load', this.supplierProduct);
   }
 
   pay() {
-    this.pharmaciesService.payProduct(this.product).subscribe(response => {
+    this.pharmaciesService.payProduct(this.supplierProduct).subscribe(response => {
       console.log('pay response', response);
-      this.router.navigateByUrl('account/customer/purchases');
+      this.router.navigateByUrl('account/pharmacy/purchases');
       this.toastr.success('Producto pagado');
     }, error => {
       console.log('pay error', error);
@@ -111,11 +115,11 @@ export class PShoppingCartComponent implements OnInit {
   }
 
   add() {
-    this.product.quantity++;
+    this.supplierProduct.quantity++;
   }
 
   rest() {
-    this.product.quantity--;
+    this.supplierProduct.quantity--;
   }
 
   getUser() {

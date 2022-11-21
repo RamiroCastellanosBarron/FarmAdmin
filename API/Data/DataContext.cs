@@ -12,41 +12,77 @@ namespace API.Data
         }
 
         public DbSet<Product> Products { get; set; }
-        public DbSet<Sale> Sales { get; set; }
         public DbSet<Address> Addresses { get; set; }
+
+        public DbSet<InventoryPharmacy> PharmacyProducts { get; set; }
+        public DbSet<InventorySupplier> SupplierProducts { get; set; }
+
+        public DbSet<Sale> Sales { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.Entity<AppUser>().Navigation(x => x.UserRoles).AutoInclude();
+
             builder.Entity<AppUser>().Navigation(x => x.Address).AutoInclude();
+            builder.Entity<InventorySupplier>().Navigation(x => x.Product).AutoInclude();
+            builder.Entity<Product>().Navigation(x => x.SupplierProducts).AutoInclude();
 
-            //user id es requerido para producto
-            //address no requiere de UserId
-
-            builder.Entity<Product>()
-                .HasOne(x => x.User)
-                .WithMany(x => x.Products)
-                .HasForeignKey(x => x.UserId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<Address>()
+                .HasMany(x => x.Users)
+                .WithOne(x => x.Address)
+                .HasForeignKey(x => x.AddressId)
+                .IsRequired();
 
             builder.Entity<AppUser>()
-                .HasMany(x => x.Products)
-                .WithOne(x => x.User)
-                .HasForeignKey(x => x.UserId)
-                //.HasForeignKey     AGREGAR VARIOS DE ESTOS DENTRO DE APPUSER ?????
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasMany(x => x.PharmacyProducts)
+                .WithOne(x => x.Pharmacy)
+                .HasForeignKey(x => x.PharmacyId)
+                .IsRequired();
+            
+            builder.Entity<Product>()
+                .HasMany(x => x.PharmacyProducts)
+                .WithOne(x => x.Product)
+                .HasForeignKey(x => x.ProductId)
+                .IsRequired();
+
+            builder.Entity<AppUser>()
+                .HasMany(x => x.SupplierProducts)
+                .WithOne(x => x.Supplier)
+                .HasForeignKey(x => x.SupplierId)
+                .IsRequired();
+
+            builder.Entity<Product>()
+                .HasMany(x => x.SupplierProducts)
+                .WithOne(x => x.Product)
+                .HasForeignKey(x => x.ProductId)
+                .IsRequired();
+
+            builder.Entity<Product>()
+                .HasMany(x => x.ProductSales)
+                .WithOne(x => x.Product)
+                .HasForeignKey(x => x.ProductId)
+                .IsRequired();
+
+            builder.Entity<AppUser>()
+                .HasMany(x => x.ProductsSold)
+                .WithOne(x => x.Seller)
+                .HasForeignKey(x => x.SellerId)
+                .IsRequired();
 
             builder.Entity<Sale>()
                 .HasOne(x => x.Seller)
-                .WithMany(x => x.ItemsSold)
+                .WithMany(x => x.ProductsSold)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<AppUser>()
+                .HasMany(x => x.ProductsBought)
+                .WithOne(x => x.Buyer)
+                .HasForeignKey(x => x.BuyerId)
+                .IsRequired();
 
             builder.Entity<Sale>()
                 .HasOne(x => x.Buyer)
-                .WithMany(x => x.ItemsBought)
+                .WithMany(x => x.ProductsBought)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<AppUser>()

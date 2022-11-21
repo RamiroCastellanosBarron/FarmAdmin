@@ -26,11 +26,11 @@ import { Component, OnInit } from '@angular/core';
             style="cursor: pointer"
           >
             <td class="ps-4">
-              {{ product.name }}
+              {{ product.product.name }}
             </td>
-            <td>{{ product.description }}</td>
+            <td>{{ product.product.description }}</td>
             <td class="text-center">
-              {{ product.price | currency }}
+              {{ product.product.price | currency }}
             </td>
             <td class="text-center">{{product.quantity | number}}</td>
           </tr>

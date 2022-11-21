@@ -1,6 +1,8 @@
-﻿using API.Entities;
+﻿using API.DTOs;
+using API.Entities;
 using API.Interfaces;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
@@ -16,24 +18,33 @@ namespace API.Data
             _mapper = mapper;
         }
 
-        public async Task<bool> BuyProduct(Product product, int CustomerId)
+        public async Task<bool> BuyProduct(InventorySupplier supplierProduct, int CustomerId)
         {
-            if (product == null) return false;
+            if (supplierProduct == null)
+            {
+                return false;
+            }
 
             var sale = new Sale()
-            {
-                Quantity = product.Quantity,
-                ProductId = product.Id,
-                SellerId = product.UserId,
-                BuyerId = CustomerId
+            { 
+                BuyerId = CustomerId, 
+                SellerId = supplierProduct.SupplierId,
+                ProductId= supplierProduct.ProductId,
+                Quantity = supplierProduct.Quantity,
             };
 
-            var prod = await _context.Products
-                .SingleOrDefaultAsync(x => x.Id == product.Id);
-
-            prod.Quantity -= product.Quantity;
-
             await _context.Sales.AddAsync(sale);
+
+            var supProduct = await _context.SupplierProducts
+                .FirstOrDefaultAsync(x => x.ProductId == supplierProduct.Id);
+
+            supProduct.Quantity-=supplierProduct.Quantity;
+
+            var pharmacyProduct = await _context.PharmacyProducts
+                .FirstOrDefaultAsync(x => x.ProductId == supplierProduct.Id);
+
+            pharmacyProduct.Quantity+=supplierProduct.Quantity;
+
             await _context.SaveChangesAsync();
 
             return true;
@@ -46,6 +57,7 @@ namespace API.Data
                 .Include(x => x.Product)
                 .Where(x => x.SellerId == UserId)
                 .Where(x => x.BuyerId == id)
+                .OrderByDescending(x => x.SaleDate)
                 .ToListAsync();
 
             return purchases;
@@ -70,69 +82,43 @@ namespace API.Data
             return customersList;
         }
 
-        public async Task<Product> GetItem(int id)
+        public async Task<InventorySupplier> GetItem(int id)
         {
-            var product = await _context.Products
-                .Include(x => x.User)
-                .SingleOrDefaultAsync(x => x.Id == id);
+            var item = await _context.SupplierProducts
+                .Include(x => x.Supplier)
+                .Include(x => x.Product)
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            return item;
+        }
+
+        // for supplier
+        public async Task<IEnumerable<InventorySupplierDto>> GetItems()
+        {
+            var products = await _context.SupplierProducts
+                .Include(x => x.Supplier)
+                .Include(x => x.Product)
+                .ProjectTo<InventorySupplierDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            return products;
+        }
+
+        public async Task<InventoryPharmacy> GetProduct(int id)
+        {
+            var product = await _context.PharmacyProducts
+                .Include(x => x.Product)
+                .Include(x => x.Pharmacy)
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             return product;
         }
 
-        public async Task<IEnumerable<Product>> GetItems()
+        public async Task<IEnumerable<InventoryPharmacy>> GetProducts(int id)
         {
-            var suppliersList = new List<AppUser>();
-
-            var productsList = new List<Product>();
-
-            var suppliersIds = new List<int>();
-
-            var products = await _context.Products
-                .Include(x => x.User)
-                .ToListAsync();
-
-            var suppliers = await _context.Users
-                .Include(x => x.UserRoles)
-                .ToListAsync();
-
-            foreach (var supplier in suppliers)
-            {
-                foreach (var s in supplier.UserRoles)
-                {
-                    if (s.RoleId == 3) suppliersList.Add(supplier);
-                }
-            }
-
-            foreach (var supplier in suppliersList)
-            {
-                suppliersIds.Add(supplier.Id);
-            }
-
-            foreach (var product in products)
-            {
-                for (int i = 0; i < suppliersList.Count - 1; i++)
-                {
-                    if (product.UserId == suppliersIds[i]) productsList.Add(product);
-                }
-            }
-
-            return productsList;
-        }
-
-        public async Task<Product> GetProduct(int id)
-        {
-            var product = await _context.Products
-                .Include(x => x.User)
-                .SingleOrDefaultAsync(x => x.Id == id);
-
-            return product;
-        }
-
-        public async Task<IEnumerable<Product>> GetProducts(string username)
-        {
-            var products = await _context.Products
-                .Include(x => x.User)
-                .Where(x => x.User.UserName == username)
+            var products = await _context.PharmacyProducts
+                .Include(x => x.Product)
+                .Where(x => x.PharmacyId == id)
                 .ToListAsync();
 
             return products;
@@ -141,24 +127,22 @@ namespace API.Data
         public async Task<Sale> GetPurchase(int id)
         {
             var purchase = await _context.Sales
+                .Include(x => x.Product)
                 .Include(x => x.Seller)
                 .Include(x => x.Buyer)
-                .Include(x => x.Product)
                 .SingleOrDefaultAsync(x => x.Id == id);
 
             return purchase;
         }
 
-        public async Task<IEnumerable<Sale>> GetPurchases(int id)
+        public async Task<IEnumerable<SaleDto>> GetPurchases(int id)
         {
-            var purchasesList = new List<Sale>();
-
             var purchases = await _context.Sales
                 .Include(x => x.Product)
                 .Include(x => x.Seller)
-                .Include(x => x.Buyer)
                 .Where(x => x.BuyerId == id)
                 .OrderByDescending(x => x.SaleDate)
+                .ProjectTo<SaleDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
             return purchases;
@@ -168,19 +152,19 @@ namespace API.Data
         {
             var sale = await _context.Sales
                 .Include(x => x.Product)
-                .Include(x => x.Seller)
                 .Include(x => x.Buyer)
+                .Include(x => x.Seller)
                 .SingleOrDefaultAsync(x => x.Id == id);
 
             return sale;
         }
 
-        public async Task<IEnumerable<Sale>> GetSales(string username)
+        public async Task<IEnumerable<Sale>> GetSales(int id)
         {
             var sales = await _context.Sales
-                .Include(x => x.Buyer)
                 .Include(x => x.Product)
-                .Where(x => x.Seller.UserName == username)
+                .Include(x => x.Buyer)
+                .Where(x => x.SellerId == id)
                 .ToListAsync();
 
             return sales;
@@ -189,8 +173,9 @@ namespace API.Data
         public async Task<AppUser> GetSupplier(int id)
         {
             var supplier = await _context.Users
-                .Include(x => x.Products)
-                .SingleOrDefaultAsync(x => x.Id == id);
+                 .Include(x => x.SupplierProducts)
+                 .ThenInclude(x => x.Product)
+                 .SingleOrDefaultAsync(x => x.Id == id);
 
             return supplier;
         }

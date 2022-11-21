@@ -42,15 +42,15 @@ export class AccountComponent implements OnInit {
 
   ngOnInit(): void {
     this.setCurrentUser();
-    console.log('role', this.role);
+    // console.log('role', this.role);
 
-    if(this.role === 'supplier' || this.role === 'pharmacy') {
-      this.url = 'account/' + this.role + '/sales';
-    } else if(this.role === 'customer') {
-      this.url = 'account/' + this.role + '/purchases';
-    }
+    // if(this.role === 'supplier' || this.role === 'pharmacy') {
+    //   this.url = 'account/' + this.role + '/sales';
+    // } else if(this.role === 'customer') {
+    //   this.url = 'account/' + this.role + '/purchases';
+    // }
 
-    this.router.navigateByUrl(this.url);
+    // this.router.navigateByUrl(this.url);
 
     $(document).ready(function () {
       var html = $('html')

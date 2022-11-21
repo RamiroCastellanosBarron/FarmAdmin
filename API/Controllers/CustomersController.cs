@@ -1,4 +1,5 @@
-﻿using API.Entities;
+﻿using API.DTOs;
+using API.Entities;
 using API.Extensions;
 using API.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -26,15 +27,15 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<AppUser>>> GetPharmacies(int id)
+        public async Task<ActionResult<IEnumerable<InventoryPharmacy>>> GetPharmacy(int id)
         {
-            var pharmacies = await _unitOfWork.CustomersRepository.GetPharmacy(id);
+            var pharmacyProducts = await _unitOfWork.CustomersRepository.GetPharmacyProducts(id);
 
-            return Ok(pharmacies);
+            return Ok(pharmacyProducts);
         }
 
         [HttpGet("products")]
-        public async Task<ActionResult<IEnumerable<AppUser>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<InventoryPharmacyDto>>> GetProducts()
         {
             var products = await _unitOfWork.CustomersRepository.GetProducts();
 
@@ -74,9 +75,9 @@ namespace API.Controllers
         }
 
         [HttpPost("buy")]
-        public async Task<ActionResult<string>> BuyProduct(Product product)
+        public async Task<ActionResult<string>> BuyProduct(InventoryPharmacy pharmacyProduct)
         {
-            var response = await _unitOfWork.CustomersRepository.BuyProduct(product, User.GetUserId());
+            var response = await _unitOfWork.CustomersRepository.BuyProduct(pharmacyProduct, User.GetUserId());
 
             if (response == false) return BadRequest();
 

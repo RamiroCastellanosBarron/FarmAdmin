@@ -29,12 +29,12 @@ import { Component, OnInit } from '@angular/core';
 
         <tbody>
           <tr
-            *ngFor="let product of pharmacy.products"
+            *ngFor="let product of pharmacy.pharmacyProducts"
           >
           <td class="ps-4">
-            {{ product.name }}
+            {{ product.product.name }}
           </td>
-            <td>{{ product.description }}</td>
+            <td>{{ product.product.description }}</td>
             <td class="text-center">
               <span class="text-secondary fw-bold">{{ product.quantity }}</span>
             </td>

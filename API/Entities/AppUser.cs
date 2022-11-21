@@ -8,13 +8,15 @@ namespace API.Entities
         public string LastName { get; set; }
         public string Gender { get; set; }
 
-        public ICollection<AppUserRole> UserRoles { get; set; }
-        public ICollection<Product> Products { get; set; }
-
-        public ICollection<Sale> ItemsSold { get; set; }
-        public ICollection<Sale> ItemsBought { get; set; }
-
         public int AddressId { get; set; }
         public Address Address { get; set; }
+
+        public ICollection<AppUserRole> UserRoles { get; set; }
+
+        public ICollection<InventoryPharmacy> PharmacyProducts { get; set; }
+        public ICollection<InventorySupplier> SupplierProducts{ get; set; }
+
+        public ICollection<Sale> ProductsSold { get; set; }
+        public ICollection<Sale> ProductsBought { get; set; }
     }
 }

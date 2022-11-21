@@ -3,6 +3,7 @@ using API.Helpers;
 using API.Interfaces;
 using API.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace API.Extensions
 {
@@ -17,6 +18,10 @@ namespace API.Extensions
             services.AddDbContext<DataContext>(options =>
             {
                 options.UseSqlServer(config.GetConnectionString("DefaultConnection"));
+
+                options.ConfigureWarnings(warnings =>
+
+                warnings.Ignore(CoreEventId.NavigationBaseIncludeIgnored));
             });
 
             return services;
