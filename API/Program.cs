@@ -21,14 +21,21 @@ app.UseRouting();
 
 app.UseCors(options =>
 {
-    options.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+    options.AllowAnyHeader();
+    options.AllowAnyMethod();
+    options.AllowAnyOrigin();
 });
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
+app.MapControllers();
+app.MapFallbackToController("Index", "Fallback");
+
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
 
