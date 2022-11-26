@@ -26,7 +26,7 @@ namespace API.Data
             }
 
             var sale = new Sale()
-            { 
+            {
                 BuyerId = CustomerId, 
                 SellerId = supplierProduct.SupplierId,
                 ProductId= supplierProduct.ProductId,
@@ -36,12 +36,14 @@ namespace API.Data
             await _context.Sales.AddAsync(sale);
 
             var supProduct = await _context.SupplierProducts
-                .FirstOrDefaultAsync(x => x.ProductId == supplierProduct.Id);
+                .Where(x => x.SupplierId == supplierProduct.SupplierId && x.ProductId == supplierProduct.ProductId)
+                .SingleAsync();
 
             supProduct.Quantity-=supplierProduct.Quantity;
 
             var pharmacyProduct = await _context.PharmacyProducts
-                .FirstOrDefaultAsync(x => x.ProductId == supplierProduct.Id);
+                .Where(x => x.PharmacyId == CustomerId && x.ProductId == supplierProduct.ProductId)
+                .SingleAsync();
 
             pharmacyProduct.Quantity+=supplierProduct.Quantity;
 
@@ -99,6 +101,7 @@ namespace API.Data
                 .Include(x => x.Supplier)
                 .Include(x => x.Product)
                 .ProjectTo<InventorySupplierDto>(_mapper.ConfigurationProvider)
+                .OrderByDescending(x => x.SupplierId)
                 .ToListAsync();
 
             return products;
